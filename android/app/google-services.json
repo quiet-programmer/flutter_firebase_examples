@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "289270801695",
+    "firebase_url": "https://tut-for-firebase.firebaseio.com",
+    "project_id": "tut-for-firebase",
+    "storage_bucket": "tut-for-firebase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:289270801695:android:067a4b1648c36b51587c2a",
+        "android_client_info": {
+          "package_name": "com.example.tut_firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "289270801695-99g9skjtms8qs3rotonj9fk0c1o7sfng.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsE0Gy9NQiBOkiXrifmZDMAfzYGHK7ea0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "289270801695-99g9skjtms8qs3rotonj9fk0c1o7sfng.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
