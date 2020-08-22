@@ -1,0 +1,127 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tut_firebase/models/user.dart';
+import 'package:tut_firebase/services/database.dart';
+import 'package:tut_firebase/shared/loading.dart';
+
+class SettingsForm extends StatefulWidget {
+  @override
+  _SettingsFormState createState() => _SettingsFormState();
+}
+
+class _SettingsFormState extends State<SettingsForm> {
+  final _formKey = GlobalKey<FormState>();
+  final List<String> sugars = ['0', '1', '2', '3', '4'];
+
+  //form values
+  String _currentName;
+  String _currentSugar;
+  int _currentStrength;
+
+  @override
+  Widget build(BuildContext context) {
+    final user = Provider.of<UserModel>(context);
+    return StreamBuilder<UserDataModel>(
+        stream: DatabaseService(uid: user.uid).userData,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            UserDataModel userData = snapshot.data;
+            return Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  Text(
+                    "Update your brew settings",
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  TextFormField(
+                    initialValue: userData.name,
+                    validator: (val) {
+                      if (val.isEmpty) {
+                        return "Name is empty";
+                      } else {
+                        return null;
+                      }
+                    },
+                    onChanged: (val) {
+                      setState(() {
+                        _currentName = val;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      hintText: "Name",
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  //dropdown
+                  DropdownButtonFormField(
+                    value: _currentSugar ?? userData.sugars,
+                    items: sugars.map((sugar) {
+                      return DropdownMenuItem(
+                        value: sugar,
+                        child: Text("$sugar Sugars"),
+                      );
+                    }).toList(),
+                    onChanged: (val) {
+                      setState(() {
+                        _currentSugar = val;
+                      });
+                    },
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  //slider
+                  Slider(
+                    min: 100,
+                    max: 900,
+                    divisions: 8,
+                    activeColor: Colors.brown[_currentStrength ?? 100],
+                    inactiveColor: Colors.brown[_currentStrength ?? 100],
+                    value: (_currentStrength ?? userData.strength).toDouble(),
+                    onChanged: (val) {
+                      setState(() {
+                        _currentStrength = val.round();
+                      });
+                    },
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  //button
+                  RaisedButton(
+                    onPressed: () async {
+                      if (_formKey.currentState.validate()) {
+                        await DatabaseService(uid: user.uid).updateUserData(
+                          _currentSugar ?? userData.sugars,
+                          _currentName ?? userData.name,
+                          _currentStrength ?? userData.strength,
+                        );
+                      }
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      "Update",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    color: Theme.of(context).accentColor,
+                  )
+                ],
+              ),
+            );
+          } else {
+            return Loading();
+          }
+        });
+  }
+}
