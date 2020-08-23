@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tut_firebase/screens/signin.dart';
+import 'package:tut_firebase/auth/register.dart';
+import 'package:tut_firebase/auth/signin.dart';
 
 class Authenticate extends StatefulWidget {
   @override
@@ -7,8 +8,20 @@ class Authenticate extends StatefulWidget {
 }
 
 class _AuthenticateState extends State<Authenticate> {
+  bool showSignin = true;
+
+  void toggleView() {
+    setState(() {
+      showSignin = !showSignin;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SigninScreen();
+    if (showSignin) {
+      return SigninScreen(toggleView: toggleView);
+    } else {
+      return RegisterScreen(toggleView: toggleView);
+    }
   }
 }
