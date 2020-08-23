@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tut_firebase/services/auth.dart';
 import 'package:tut_firebase/shared/loading.dart';
 
@@ -120,6 +121,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 error = "Something went wrong";
                                 isLoading = false;
                               });
+                              if (result is PlatformException) {
+                                if (result.code ==
+                                    "ERROR_EMAIL_ALREADY_IN_USE") {
+                                  setState(() {
+                                    error =
+                                        "The email address is already in use by another account";
+                                    isLoading = false;
+                                  });
+                                }
+                              }
                             }
                           }
                         },
